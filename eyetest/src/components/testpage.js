@@ -33,15 +33,15 @@ class Header extends React.Component {
 }
 
 class EyeTracker extends React.Component {
-  // drawCoordinates(x, y) {
-  //   var ctx = document.getElementById("plotting_canvas").getContext("2d")
-  //   ctx.fillStyle = "Red"
-  //   ctx.beginPath()
-  //   ctx.arc(x, y, 5, 0, Math.PI * 2, true)
-  //   ctx.fill()
-  // }
-
-  calibrate() {}
+  calibrate() {
+    const webgazer = require("webgazer")
+    var prediction = webgazer.getCurrentPrediction()
+    if (prediction) {
+      var x = prediction.x
+      var y = prediction.y
+    }
+    console.log(x, y)
+  }
 
   antiSaccadeTest() {
     function update() {}
