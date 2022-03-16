@@ -1,9 +1,6 @@
 import React, { Component } from "react"
 
 class TestPage extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     return (
       <div>
@@ -14,9 +11,6 @@ class TestPage extends React.Component {
   }
 }
 class Header extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     return (
       <div className="row" style={{ backgroundColor: "#F0F8FF" }}>
@@ -39,21 +33,16 @@ class Header extends React.Component {
 }
 
 class EyeTracker extends React.Component {
-  constructor(props) {
-    super(props)
-  }
+  // drawCoordinates(x, y) {
+  //   var ctx = document.getElementById("plotting_canvas").getContext("2d")
+  //   ctx.fillStyle = "Red"
+  //   ctx.beginPath()
+  //   ctx.arc(x, y, 5, 0, Math.PI * 2, true)
+  //   ctx.fill()
+  // }
 
-  drawCoordinates(x, y) {
-    var ctx = document.getElementById("plotting_canvas").getContext("2d")
-    ctx.fillStyle = "Red"
-    ctx.beginPath()
-    ctx.arc(x, y, 5, 0, Math.PI * 2, true)
-    ctx.fill()
-  }
+  calibrate() {}
 
-  calibrate() {
-      
-  }
   antiSaccadeTest() {
     function update() {}
     var intervalID = setInterval(update, 1000)
