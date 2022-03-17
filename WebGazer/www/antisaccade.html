@@ -3,9 +3,128 @@
 <head>
   <title>Anti Saccade Test</title>
   <script src="./webgazer.js"></script>
+  
 </head>
+<style>
+  #center {
+  margin-top:250px ;
+  width: 1%;
+  margin-left: 600px;
+  display : inline;
+}
+#right {
+  display: block;
+  margin-top:250px ;
+  float: right;
+  width: 1%;
+  margin-right: 200px;
+  display : none;
+}
+
+#left {
+  margin-top:250px ;
+  float: left;
+  width: 1%;
+  margin-left: 200px;
+  display : none;
+}
+.center {
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
+}
+
+
+</style>
+
+<script>
+  var data = {gazedata: [], 
+              dotdata: [], 
+              }
+  var count = 0
+  var run = null
+  var gazeinterval= null
+  var calls = 0;
+
+  function saccadeTest(){
+
+    if(calls > 20){
+      document.getElementById("status").innerHTML = "Finished Test, Refresh to Start Again"
+      closeInterval(run)
+      closeInterval(gazeinterval)
+      sendJSON(data)
+      return
+    }
+    else if(calls > 10){
+      if(count == 10){
+        document.getElementById("right").style.display = 'inline'
+        document.getElementById("center").style.display = 'none'
+        center = false
+        right = true
+      }
+      else if(count == 11){
+          document.getElementById("center").style.display = 'inline'
+          document.getElementById("right").style.display = 'none'
+          center = true
+          right = false
+          count = 0
+          calls++
+      }
+
+    }
+    else{
+      if(count == 10){
+          document.getElementById("left").style.display = 'inline'
+          document.getElementById("center").style.display = 'none'
+          center = false
+          left = true
+      }
+      else if(count == 11){
+          document.getElementById("center").style.display = 'inline'
+          document.getElementById("left").style.display = 'none'
+          center = true
+          left = false
+          count = 0
+          calls++
+      }
+    }
+
+    count++
+  }
+  function createGazePoint(){
+    var gazePoint = webgazer.getCurrentPrediction();
+    var timestamp = Date.now();
+    data['gazedata'].push({timestamp: timestamp, x: gazePoint.x, y: gazePoint.y})
+  }
+  
+  function launchSaccadeTest(){
+    document.getElementById("right").style.display = 'none'
+    document.getElementById("left").style.display = 'none'
+    document.getElementById("status").innerHTML = "Test Running"
+    gazeinterval = setInterval(createGazePoint, 1)
+    run = setInterval(saccadeTest, 500)
+  }
+
+</script>
 <body>
-    <div><h1>Anti Saccade test</h1></div>
+    <div class='center' ><h1>Anti Saccade test</h1></div>
     <script src="js/antisaccade.js"></script>
-    <button onclick="sendJSON()">Finished</button>
+    <div>
+      <div class='center'>
+        <p id = "status">Test not launched</p>
+        <button onClick= "launchSaccadeTest()">Saccade Test</button>
+        <a href = "/"><button>Homepage</button></a>
+      </div>
+      <div>
+        <p id="demo"></p>
+      </div>
+      <div id="imgs">
+        <img src="./media/red.png" alt = "center-red" id = "center">
+        <img src="./media/red.png" alt = "right-red" id = "right">
+        <img src="./media/red.png" alt = "left-red" id = "left">
+      </div>
+    
+      
+    </div>
 </body>
