@@ -3,11 +3,17 @@ var count = 0
 var run = null
 var gazeinterval = null
 var calls = 0
+var startstate = 0
 
 webgazer
   .setGazeListener(function (data, elapsedTime) {
     if (data == null) {
       return
+    }
+    if (startstate == 0) {
+      document.getElementById("status").innerHTML =
+        "Test Ready to Begin, Press Start Test Button"
+      startstate++
     }
     var timestamp = Date.now()
     globalData["gazedata"].push({
@@ -21,36 +27,44 @@ webgazer
 webgazer.saveDataAcrossSessions(true)
 
 function saccadeTest() {
-  if (calls > 1) {
+  if (calls == 1) {
     document.getElementById("status").innerHTML =
       "Finished Test, Refresh to Start Again"
     endSaccadeTest()
     return
-  } else if (calls > 10) {
+  } else if (calls >= 1) {
     if (count == 10) {
-      document.getElementById("right").style.display = "inline"
+      document.getElementById("right").style.display = "block"
       document.getElementById("center").style.display = "none"
-      center = false
-      right = true
+      globalData["dotdata"].push({
+        timestamp: Date.now(),
+        dotposition: "right",
+      })
     } else if (count == 11) {
-      document.getElementById("center").style.display = "inline"
+      document.getElementById("center").style.display = "block"
       document.getElementById("right").style.display = "none"
-      center = true
-      right = false
+      globalData["dotdata"].push({
+        timestamp: Date.now(),
+        dotposition: "center",
+      })
       count = 0
       calls++
     }
   } else {
     if (count == 10) {
-      document.getElementById("left").style.display = "inline"
+      document.getElementById("left").style.display = "block"
       document.getElementById("center").style.display = "none"
-      center = false
-      left = true
+      globalData["dotdata"].push({
+        timestamp: Date.now(),
+        dotposition: "left",
+      })
     } else if (count == 11) {
-      document.getElementById("center").style.display = "inline"
+      document.getElementById("center").style.display = "block"
       document.getElementById("left").style.display = "none"
-      center = true
-      left = false
+      globalData["dotdata"].push({
+        timestamp: Date.now(),
+        dotposition: "center",
+      })
       count = 0
       calls++
     }
@@ -59,29 +73,54 @@ function saccadeTest() {
   count++
 }
 
-function sendJSON(data) {
-  console.log(data)
-  fetch("http://localhost:8000/collector", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  }).then((res) => {
-    console.log("Request complete! response:", res)
-  })
+function analyzeJSON(data) {
+  error = 10
+  document.getElementById("status").innerHTML =
+    "Finished Test with " +
+    String(error) +
+    " % error rate, Refresh to Start Again"
 }
 
 function launchSaccadeTest() {
-  document.getElementById("right").style.display = "none"
-  document.getElementById("left").style.display = "none"
   document.getElementById("status").innerHTML = "Test Running"
+  document.getElementById("center").style.display = "block"
+  document.getElementById("block1").style.display = "none"
   globalData = { gazedata: [], dotdata: [] }
+  globalData["dotdata"].push({
+    timestamp: Date.now(),
+    dotposition: "center",
+  })
+
+  //Getting coordinates of center dot
+  var img = document.getElementById("center").getBoundingClientRect()
+  var img_y = (img.top + img.bottom) / 2
+  var img_x = (img.left + img.right) / 2
+  globalData["center"] = { x: img_x, y: img_y }
+
+  //Getting coordinates of right dot
+  document.getElementById("right").style.display = "inline"
+  var img = document.getElementById("right").getBoundingClientRect()
+  var img_y = (img.top + img.bottom) / 2
+  var img_x = (img.left + img.right) / 2
+  globalData["right"] = { x: img_x, y: img_y }
+  document.getElementById("right").style.display = "none"
+
+  //Getting coordinates of left dot
+  document.getElementById("left").style.display = "inline"
+  var img = document.getElementById("left").getBoundingClientRect()
+  var img_y = (img.top + img.bottom) / 2
+  var img_x = (img.left + img.right) / 2
+  globalData["left"] = { x: img_x, y: img_y }
+  document.getElementById("left").style.display = "none"
   webgazer.showPredictionPoints(false)
   webgazer.showVideo(false)
   run = setInterval(saccadeTest, 500)
 }
 
 function endSaccadeTest() {
-  sendJSON(globalData)
+  document.getElementById("block1").style.display = "block"
+  document.getElementById("center").style.display = "none"
+  analyzeJSON(globalData)
   clearInterval(run)
   clearInterval(gazeinterval)
   webgazer.showPredictionPoints(true)

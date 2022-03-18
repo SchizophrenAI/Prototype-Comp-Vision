@@ -5,14 +5,15 @@
   <script src="./webgazer.js"></script>
   <link rel="stylesheet" href="./css/antisaccade.css" />
 </head>
-
 <body>
-  <div class="center"><h1>Anti Saccade test</h1></div>
   <script src="./js/antisaccade.js"></script>
   <div>
-    <div class="center">
-      <p id="status">Test not launched</p>
-      <button onClick="launchSaccadeTest()">Saccade Test</button>
+    <div id="block1">
+      <h1>Anti Saccade test</h1>
+      <p id="status">
+        Test Not Ready, Please Wait for Camera to Begin Recording Gaze
+      </p>
+      <button onClick="launchSaccadeTest()">Start Test</button>
       <a href="/"><button>Homepage</button></a>
     </div>
     <div>
