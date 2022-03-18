@@ -1,0 +1,28 @@
+#center {
+  margin-top: 250px;
+  width: 1%;
+  margin-left: 600px;
+  display: inline;
+}
+#right {
+  display: block;
+  margin-top: 250px;
+  float: right;
+  width: 1%;
+  margin-right: 200px;
+  display: none;
+}
+
+#left {
+  margin-top: 250px;
+  float: left;
+  width: 1%;
+  margin-left: 200px;
+  display: none;
+}
+.center {
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
+}
