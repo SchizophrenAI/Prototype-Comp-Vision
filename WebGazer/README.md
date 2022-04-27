@@ -8,7 +8,14 @@ Within the /www directory there are two HTML files:
 To run the example files as a server:
 
 	# Clone the repository and download NodeJS using the steps listed above
-	# Move into the www directory and download the additional dependencies
+	First run
+	cd WebGazer
+	#install the dependencies
+	npm install
+	#build the project
+	npm run build
+	
+	# Then Move into the www directory and download the additional dependencies
 	cd www
 	npm install
 	# Run the webpage index.html as a server
