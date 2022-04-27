@@ -8,11 +8,11 @@ Within the /www directory there are two HTML files:
 To run the example files as a server:
 
 	# Clone the repository and download NodeJS using the steps listed above
-	First run
+	# First run
 	cd WebGazer
-	#install the dependencies
+	# install the dependencies
 	npm install
-	#build the project
+	# build the project
 	npm run build
 	
 	# Then Move into the www directory and download the additional dependencies
@@ -20,6 +20,8 @@ To run the example files as a server:
 	npm install
 	# Run the webpage index.html as a server
 	npm run serve
+
+**Finally download webgazer.js from https://webgazer.cs.brown.edu/webgazer.js and place in www folder**
 
 ### Acknowledgements to Machine Learning Eye Tracking Software WebGazer
 
